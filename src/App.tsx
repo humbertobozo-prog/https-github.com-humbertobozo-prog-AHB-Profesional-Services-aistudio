@@ -482,7 +482,7 @@ const Contact = ({ lang }: { lang: Language }) => {
   return (
     <section id="contacto" className="py-16 lg:py-24 bg-white">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="bg-blue-600 rounded-3xl lg:rounded-[40px] px-6 py-12 lg:p-20 text-white relative overflow-hidden">
+        <div className="bg-blue-600 rounded-3xl lg:rounded-[40px] px-4 py-10 sm:px-6 lg:p-20 text-white relative overflow-hidden">
           <div className="absolute top-0 right-0 w-64 h-64 bg-white/10 rounded-full -mr-32 -mt-32 blur-3xl" />
           <div className="absolute bottom-0 left-0 w-64 h-64 bg-blue-400/20 rounded-full -ml-32 -mb-32 blur-3xl" />
           
@@ -516,7 +516,7 @@ const Contact = ({ lang }: { lang: Language }) => {
               initial={{ opacity: 0, scale: 0.95 }}
               whileInView={{ opacity: 1, scale: 1 }}
               viewport={{ once: true }}
-              className="bg-white rounded-2xl lg:rounded-3xl p-6 lg:p-8 text-slate-900 shadow-2xl"
+              className="bg-white rounded-2xl lg:rounded-3xl p-5 sm:p-6 lg:p-8 text-slate-900 shadow-2xl"
             >
               <form className="space-y-5">
                 <div>
