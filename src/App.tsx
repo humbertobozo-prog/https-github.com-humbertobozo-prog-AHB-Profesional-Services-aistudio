@@ -3,7 +3,8 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
+import ReactGA from 'react-ga4';
 import { motion, AnimatePresence } from 'motion/react';
 import { 
   Briefcase, 
@@ -76,9 +77,11 @@ const translations = {
       subtitle: "Agende una sesión de diagnóstico inicial para identificar las oportunidades de mejora en sus flujos de trabajo.",
       labelName: "Nombre Completo",
       labelEmail: "Email Corporativo",
+      labelSubject: "Asunto",
       labelMessage: "Mensaje",
       placeholderName: "Ej. Juan Pérez",
       placeholderEmail: "juan@empresa.com",
+      placeholderSubject: "¿En qué podemos ayudarle?",
       placeholderMessage: "Cuéntenos sobre sus necesidades de optimización...",
       button: "Enviar Mensaje"
     },
@@ -135,9 +138,11 @@ const translations = {
       subtitle: "Schedule an initial diagnostic session to identify improvement opportunities in your workflows.",
       labelName: "Full Name",
       labelEmail: "Corporate Email",
+      labelSubject: "Subject",
       labelMessage: "Message",
       placeholderName: "e.g. John Doe",
       placeholderEmail: "john@company.com",
+      placeholderSubject: "How can we help you?",
       placeholderMessage: "Tell us about your optimization needs...",
       button: "Send Message"
     },
@@ -159,7 +164,7 @@ const Navbar = ({ lang, setLang }: { lang: Language, setLang: (l: Language) => v
             <span className="text-2xl font-bold tracking-tighter text-slate-900">
               AHB<span className="text-blue-600">.</span>
             </span>
-            <span className="ml-2 text-sm font-medium uppercase tracking-widest text-slate-500 hidden sm:block">
+            <span className="ml-2 text-[10px] sm:text-sm font-medium uppercase tracking-widest text-slate-500">
               Professional Services
             </span>
           </div>
@@ -235,10 +240,34 @@ const Hero = ({ lang }: { lang: Language }) => {
               {t.subtitle}
             </p>
             <div className="flex flex-col sm:flex-row gap-4">
-              <a href="#contacto" className="px-8 py-4 bg-blue-600 text-white rounded-2xl font-semibold flex items-center justify-center hover:bg-blue-700 transition-all shadow-xl shadow-blue-200">
+              <a 
+                href="#contacto" 
+                onClick={() => {
+                  if (import.meta.env.VITE_GA_MEASUREMENT_ID) {
+                    ReactGA.event({
+                      category: 'User Interaction',
+                      action: 'Hero CTA Click',
+                      label: 'Request Consultancy'
+                    });
+                  }
+                }}
+                className="px-8 py-4 bg-blue-600 text-white rounded-2xl font-semibold flex items-center justify-center hover:bg-blue-700 transition-all shadow-xl shadow-blue-200"
+              >
                 {t.ctaPrimary} <ArrowRight className="ml-2" size={20} />
               </a>
-              <a href="#servicios" className="px-8 py-4 bg-white border border-slate-200 text-slate-900 rounded-2xl font-semibold flex items-center justify-center hover:bg-slate-50 transition-all">
+              <a 
+                href="#servicios" 
+                onClick={() => {
+                  if (import.meta.env.VITE_GA_MEASUREMENT_ID) {
+                    ReactGA.event({
+                      category: 'User Interaction',
+                      action: 'Hero CTA Click',
+                      label: 'Our Services'
+                    });
+                  }
+                }}
+                className="px-8 py-4 bg-white border border-slate-200 text-slate-900 rounded-2xl font-semibold flex items-center justify-center hover:bg-slate-50 transition-all"
+              >
                 {t.ctaSecondary}
               </a>
             </div>
@@ -507,7 +536,7 @@ const Contact = ({ lang }: { lang: Language }) => {
                   <div className="w-10 h-10 bg-white/20 rounded-full flex items-center justify-center shrink-0">
                     <Linkedin size={18} />
                   </div>
-                  <span className="text-base lg:text-lg font-medium">LinkedIn AHB Professional</span>
+                  <span className="text-sm sm:text-base lg:text-lg font-medium">LinkedIn AHB Professional Services</span>
                 </div>
               </div>
             </motion.div>
@@ -516,23 +545,76 @@ const Contact = ({ lang }: { lang: Language }) => {
               initial={{ opacity: 0, scale: 0.95 }}
               whileInView={{ opacity: 1, scale: 1 }}
               viewport={{ once: true }}
-              className="bg-white rounded-2xl lg:rounded-3xl p-5 sm:p-6 lg:p-8 text-slate-900 shadow-2xl"
+              className="bg-white rounded-3xl p-6 sm:p-8 lg:p-10 text-slate-900 shadow-2xl relative"
             >
-              <form className="space-y-5">
-                <div>
-                  <label className="block text-xs font-bold mb-2 uppercase tracking-widest text-slate-400">{t.labelName}</label>
-                  <input type="text" className="w-full px-4 py-3.5 rounded-xl bg-slate-50 border border-slate-100 focus:outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 transition-all placeholder:text-slate-300" placeholder={t.placeholderName} />
+              <div className="absolute top-0 right-0 w-32 h-32 bg-blue-50 rounded-full -mr-16 -mt-16 blur-2xl opacity-50" />
+              
+              <form className="space-y-6 relative z-10">
+                <div className="grid sm:grid-cols-2 gap-6">
+                  <div className="space-y-2">
+                    <label className="block text-xs font-bold uppercase tracking-widest text-slate-400 ml-1">{t.labelName}</label>
+                    <div className="relative group">
+                      <div className="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none text-slate-300 group-focus-within:text-blue-500 transition-colors">
+                        <Users size={18} />
+                      </div>
+                      <input 
+                        type="text" 
+                        className="w-full pl-11 pr-4 py-3.5 rounded-xl bg-slate-50 border border-slate-100 focus:outline-none focus:ring-4 focus:ring-blue-500/10 focus:border-blue-500 transition-all placeholder:text-slate-300" 
+                        placeholder={t.placeholderName} 
+                      />
+                    </div>
+                  </div>
+                  <div className="space-y-2">
+                    <label className="block text-xs font-bold uppercase tracking-widest text-slate-400 ml-1">{t.labelEmail}</label>
+                    <div className="relative group">
+                      <div className="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none text-slate-300 group-focus-within:text-blue-500 transition-colors">
+                        <Mail size={18} />
+                      </div>
+                      <input 
+                        type="email" 
+                        className="w-full pl-11 pr-4 py-3.5 rounded-xl bg-slate-50 border border-slate-100 focus:outline-none focus:ring-4 focus:ring-blue-500/10 focus:border-blue-500 transition-all placeholder:text-slate-300" 
+                        placeholder={t.placeholderEmail} 
+                      />
+                    </div>
+                  </div>
                 </div>
-                <div>
-                  <label className="block text-xs font-bold mb-2 uppercase tracking-widest text-slate-400">{t.labelEmail}</label>
-                  <input type="email" className="w-full px-4 py-3.5 rounded-xl bg-slate-50 border border-slate-100 focus:outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 transition-all placeholder:text-slate-300" placeholder={t.placeholderEmail} />
+                
+                <div className="space-y-2">
+                  <label className="block text-xs font-bold uppercase tracking-widest text-slate-400 ml-1">{t.labelSubject}</label>
+                  <div className="relative group">
+                    <div className="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none text-slate-300 group-focus-within:text-blue-500 transition-colors">
+                      <Settings size={18} />
+                    </div>
+                    <input 
+                      type="text" 
+                      className="w-full pl-11 pr-4 py-3.5 rounded-xl bg-slate-50 border border-slate-100 focus:outline-none focus:ring-4 focus:ring-blue-500/10 focus:border-blue-500 transition-all placeholder:text-slate-300" 
+                      placeholder={t.placeholderSubject} 
+                    />
+                  </div>
                 </div>
-                <div>
-                  <label className="block text-xs font-bold mb-2 uppercase tracking-widest text-slate-400">{t.labelMessage}</label>
-                  <textarea className="w-full px-4 py-3.5 rounded-xl bg-slate-50 border border-slate-100 focus:outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 transition-all h-32 placeholder:text-slate-300 resize-none" placeholder={t.placeholderMessage} />
+
+                <div className="space-y-2">
+                  <label className="block text-xs font-bold uppercase tracking-widest text-slate-400 ml-1">{t.labelMessage}</label>
+                  <textarea 
+                    className="w-full px-4 py-3.5 rounded-xl bg-slate-50 border border-slate-100 focus:outline-none focus:ring-4 focus:ring-blue-500/10 focus:border-blue-500 transition-all h-32 placeholder:text-slate-300 resize-none" 
+                    placeholder={t.placeholderMessage} 
+                  />
                 </div>
-                <button className="w-full py-4 bg-blue-600 text-white rounded-xl font-bold hover:bg-blue-700 active:scale-[0.98] transition-all shadow-xl shadow-blue-200 flex items-center justify-center gap-2">
-                  {t.button} <ArrowRight size={18} />
+
+                <button 
+                  type="button"
+                  onClick={() => {
+                    if (import.meta.env.VITE_GA_MEASUREMENT_ID) {
+                      ReactGA.event({
+                        category: 'Conversion',
+                        action: 'Form Submission Attempt',
+                        label: lang === 'es' ? 'Spanish Form' : 'English Form'
+                      });
+                    }
+                  }}
+                  className="w-full py-4 bg-blue-600 text-white rounded-xl font-bold hover:bg-blue-700 active:scale-[0.98] transition-all shadow-xl shadow-blue-200 flex items-center justify-center gap-3 text-lg"
+                >
+                  {t.button} <ArrowRight size={20} />
                 </button>
               </form>
             </motion.div>
@@ -558,7 +640,7 @@ const Footer = ({ lang }: { lang: Language }) => {
             </span>
           </div>
           
-          <div className="text-sm text-slate-500">
+          <div className="text-sm text-slate-500 text-center md:text-left">
             © {new Date().getFullYear()} AHB Professional Services. {t.rights}
           </div>
 
@@ -575,9 +657,29 @@ const Footer = ({ lang }: { lang: Language }) => {
 export default function App() {
   const [lang, setLang] = useState<Language>('es');
 
+  useEffect(() => {
+    const GA_ID = import.meta.env.VITE_GA_MEASUREMENT_ID;
+    if (GA_ID) {
+      ReactGA.initialize(GA_ID);
+      ReactGA.send({ hitType: "pageview", page: window.location.pathname });
+    }
+  }, []);
+
+  const toggleLang = () => {
+    const newLang = lang === 'es' ? 'en' : 'es';
+    setLang(newLang);
+    if (import.meta.env.VITE_GA_MEASUREMENT_ID) {
+      ReactGA.event({
+        category: 'User Interaction',
+        action: 'Change Language',
+        label: newLang.toUpperCase()
+      });
+    }
+  };
+
   return (
     <div className="min-h-screen font-sans selection:bg-blue-100 selection:text-blue-900">
-      <Navbar lang={lang} setLang={setLang} />
+      <Navbar lang={lang} setLang={toggleLang} />
       <main>
         <Hero lang={lang} />
         <Services lang={lang} />
