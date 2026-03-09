@@ -19,7 +19,9 @@ import {
   CheckCircle2,
   Trophy,
   Clock,
-  Globe
+  Globe,
+  Zap,
+  ShieldCheck
 } from 'lucide-react';
 
 type Language = 'es' | 'en';
@@ -53,6 +55,14 @@ const translations = {
         desc: "Consultoría integral para profesionalizar el área administrativa de su corporación.",
         f1: "Auditoría operativa", f2: "KPIs de gestión", f3: "Manuales de políticas"
       }
+    },
+    whyChooseUs: {
+      badge: "¿Por qué elegirnos?",
+      title: "Diferenciadores Clave",
+      item1: { title: "Experiencia Senior", desc: "Más de una década optimizando estructuras corporativas complejas." },
+      item2: { title: "Enfoque en Resultados", desc: "Incrementamos la eficiencia operativa con métricas tangibles y medibles." },
+      item3: { title: "Soluciones a Medida", desc: "No creemos en soluciones genéricas; cada empresa recibe un plan único." },
+      item4: { title: "Visión Global", desc: "Experiencia internacional aplicada a las necesidades locales de su negocio." }
     },
     ceo: {
       badge: "Liderazgo Estratégico",
@@ -104,6 +114,14 @@ const translations = {
         desc: "Comprehensive consultancy to professionalize the administrative area of your corporation.",
         f1: "Operational audit", f2: "Management KPIs", f3: "Policy manuals"
       }
+    },
+    whyChooseUs: {
+      badge: "Why Choose Us?",
+      title: "Key Differentiators",
+      item1: { title: "Senior Expertise", desc: "Over a decade optimizing complex corporate structures." },
+      item2: { title: "Results-Driven", desc: "We increase operational efficiency with tangible and measurable metrics." },
+      item3: { title: "Tailored Solutions", desc: "We don't believe in generic solutions; every company receives a unique plan." },
+      item4: { title: "Global Vision", desc: "International experience applied to the local needs of your business." }
     },
     ceo: {
       badge: "Strategic Leadership",
@@ -317,6 +335,82 @@ const Services = ({ lang }: { lang: Language }) => {
   );
 };
 
+const WhyChooseUs = ({ lang }: { lang: Language }) => {
+  const t = translations[lang].whyChooseUs;
+  const items = [
+    {
+      title: t.item1.title,
+      desc: t.item1.desc,
+      icon: <Trophy className="text-blue-600" size={24} />
+    },
+    {
+      title: t.item2.title,
+      desc: t.item2.desc,
+      icon: <Zap className="text-blue-600" size={24} />
+    },
+    {
+      title: t.item3.title,
+      desc: t.item3.desc,
+      icon: <ShieldCheck className="text-blue-600" size={24} />
+    },
+    {
+      title: t.item4.title,
+      desc: t.item4.desc,
+      icon: <Globe className="text-blue-600" size={24} />
+    }
+  ];
+
+  return (
+    <section className="py-24 bg-slate-50">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div className="grid lg:grid-cols-2 gap-16 items-center">
+          <div>
+            <h2 className="text-sm font-bold text-blue-600 uppercase tracking-[0.2em] mb-4">{t.badge}</h2>
+            <h3 className="text-4xl font-bold text-slate-900 mb-8 leading-tight">{t.title}</h3>
+            <p className="text-lg text-slate-600 mb-8">
+              {lang === 'es' 
+                ? "En AHB Professional Services, transformamos la complejidad en claridad. Nuestro enfoque metódico garantiza que cada engranaje de su organización funcione en perfecta armonía."
+                : "At AHB Professional Services, we transform complexity into clarity. Our methodical approach ensures that every gear in your organization works in perfect harmony."}
+            </p>
+            <div className="flex items-center gap-4 p-6 bg-white rounded-2xl border border-slate-100 shadow-sm">
+              <div className="w-12 h-12 bg-blue-600 rounded-full flex items-center justify-center text-white">
+                <CheckCircle2 size={24} />
+              </div>
+              <div>
+                <p className="font-bold text-slate-900">
+                  {lang === 'es' ? "Compromiso de Excelencia" : "Commitment to Excellence"}
+                </p>
+                <p className="text-sm text-slate-500">
+                  {lang === 'es' ? "Garantizamos resultados medibles en 90 días." : "We guarantee measurable results within 90 days."}
+                </p>
+              </div>
+            </div>
+          </div>
+
+          <div className="grid sm:grid-cols-2 gap-6">
+            {items.map((item, index) => (
+              <motion.div
+                key={index}
+                initial={{ opacity: 0, y: 20 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true }}
+                transition={{ delay: index * 0.1 }}
+                className="p-6 bg-white rounded-2xl border border-slate-100 shadow-sm hover:shadow-md transition-shadow"
+              >
+                <div className="w-12 h-12 bg-blue-50 rounded-xl flex items-center justify-center mb-4">
+                  {item.icon}
+                </div>
+                <h4 className="text-lg font-bold text-slate-900 mb-2">{item.title}</h4>
+                <p className="text-sm text-slate-600 leading-relaxed">{item.desc}</p>
+              </motion.div>
+            ))}
+          </div>
+        </div>
+      </div>
+    </section>
+  );
+};
+
 const CEOSection = ({ lang }: { lang: Language }) => {
   const t = translations[lang].ceo;
   return (
@@ -386,46 +480,62 @@ const CEOSection = ({ lang }: { lang: Language }) => {
 const Contact = ({ lang }: { lang: Language }) => {
   const t = translations[lang].contact;
   return (
-    <section id="contacto" className="py-24 bg-white">
+    <section id="contacto" className="py-16 lg:py-24 bg-white">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="bg-blue-600 rounded-[40px] p-8 lg:p-20 text-white relative overflow-hidden">
+        <div className="bg-blue-600 rounded-3xl lg:rounded-[40px] px-6 py-12 lg:p-20 text-white relative overflow-hidden">
           <div className="absolute top-0 right-0 w-64 h-64 bg-white/10 rounded-full -mr-32 -mt-32 blur-3xl" />
+          <div className="absolute bottom-0 left-0 w-64 h-64 bg-blue-400/20 rounded-full -ml-32 -mb-32 blur-3xl" />
           
-          <div className="grid lg:grid-cols-2 gap-16 items-center relative z-10">
-            <div>
-              <h2 className="text-4xl lg:text-5xl font-bold mb-6">{t.title}</h2>
-              <p className="text-xl text-blue-100 mb-10">
+          <div className="grid lg:grid-cols-2 gap-12 lg:gap-16 items-center relative z-10">
+            <motion.div
+              initial={{ opacity: 0, y: 20 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true }}
+            >
+              <h2 className="text-3xl lg:text-5xl font-bold mb-6 leading-tight text-center lg:text-left">{t.title}</h2>
+              <p className="text-lg lg:text-xl text-blue-100 mb-10 text-center lg:text-left">
                 {t.subtitle}
               </p>
-              <div className="space-y-6">
-                <div className="flex items-center gap-4">
-                  <div className="w-12 h-12 bg-white/20 rounded-full flex items-center justify-center">
-                    <Mail size={20} />
+              <div className="space-y-6 flex flex-col items-center lg:items-start">
+                <div className="flex items-center gap-4 bg-white/10 px-6 py-4 rounded-2xl border border-white/10 w-full max-w-md lg:max-w-none">
+                  <div className="w-10 h-10 bg-white/20 rounded-full flex items-center justify-center shrink-0">
+                    <Mail size={18} />
                   </div>
-                  <span className="text-lg">contacto@ahbprofessional.com</span>
+                  <span className="text-base lg:text-lg font-medium break-all">contacto@ahbprofessional.com</span>
+                </div>
+                <div className="flex items-center gap-4 bg-white/10 px-6 py-4 rounded-2xl border border-white/10 w-full max-w-md lg:max-w-none">
+                  <div className="w-10 h-10 bg-white/20 rounded-full flex items-center justify-center shrink-0">
+                    <Linkedin size={18} />
+                  </div>
+                  <span className="text-base lg:text-lg font-medium">LinkedIn AHB Professional</span>
                 </div>
               </div>
-            </div>
+            </motion.div>
 
-            <div className="bg-white rounded-3xl p-8 text-slate-900 shadow-2xl">
-              <form className="space-y-6">
+            <motion.div 
+              initial={{ opacity: 0, scale: 0.95 }}
+              whileInView={{ opacity: 1, scale: 1 }}
+              viewport={{ once: true }}
+              className="bg-white rounded-2xl lg:rounded-3xl p-6 lg:p-8 text-slate-900 shadow-2xl"
+            >
+              <form className="space-y-5">
                 <div>
-                  <label className="block text-sm font-bold mb-2 uppercase tracking-wider text-slate-500">{t.labelName}</label>
-                  <input type="text" className="w-full px-4 py-3 rounded-xl bg-slate-50 border border-slate-100 focus:outline-none focus:ring-2 focus:ring-blue-500 transition-all" placeholder={t.placeholderName} />
+                  <label className="block text-xs font-bold mb-2 uppercase tracking-widest text-slate-400">{t.labelName}</label>
+                  <input type="text" className="w-full px-4 py-3.5 rounded-xl bg-slate-50 border border-slate-100 focus:outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 transition-all placeholder:text-slate-300" placeholder={t.placeholderName} />
                 </div>
                 <div>
-                  <label className="block text-sm font-bold mb-2 uppercase tracking-wider text-slate-500">{t.labelEmail}</label>
-                  <input type="email" className="w-full px-4 py-3 rounded-xl bg-slate-50 border border-slate-100 focus:outline-none focus:ring-2 focus:ring-blue-500 transition-all" placeholder={t.placeholderEmail} />
+                  <label className="block text-xs font-bold mb-2 uppercase tracking-widest text-slate-400">{t.labelEmail}</label>
+                  <input type="email" className="w-full px-4 py-3.5 rounded-xl bg-slate-50 border border-slate-100 focus:outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 transition-all placeholder:text-slate-300" placeholder={t.placeholderEmail} />
                 </div>
                 <div>
-                  <label className="block text-sm font-bold mb-2 uppercase tracking-wider text-slate-500">{t.labelMessage}</label>
-                  <textarea className="w-full px-4 py-3 rounded-xl bg-slate-50 border border-slate-100 focus:outline-none focus:ring-2 focus:ring-blue-500 transition-all h-32" placeholder={t.placeholderMessage} />
+                  <label className="block text-xs font-bold mb-2 uppercase tracking-widest text-slate-400">{t.labelMessage}</label>
+                  <textarea className="w-full px-4 py-3.5 rounded-xl bg-slate-50 border border-slate-100 focus:outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 transition-all h-32 placeholder:text-slate-300 resize-none" placeholder={t.placeholderMessage} />
                 </div>
-                <button className="w-full py-4 bg-blue-600 text-white rounded-xl font-bold hover:bg-blue-700 transition-all shadow-lg shadow-blue-200">
-                  {t.button}
+                <button className="w-full py-4 bg-blue-600 text-white rounded-xl font-bold hover:bg-blue-700 active:scale-[0.98] transition-all shadow-xl shadow-blue-200 flex items-center justify-center gap-2">
+                  {t.button} <ArrowRight size={18} />
                 </button>
               </form>
-            </div>
+            </motion.div>
           </div>
         </div>
       </div>
@@ -471,6 +581,7 @@ export default function App() {
       <main>
         <Hero lang={lang} />
         <Services lang={lang} />
+        <WhyChooseUs lang={lang} />
         <CEOSection lang={lang} />
         <Contact lang={lang} />
       </main>
